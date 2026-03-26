@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Weather App</title>
+
+<style>
+
+body{
+    font-family: Arial;
+    background: linear-gradient(to right,#b97a7a,#bda864);
+    text-align:center;
+    padding-top:80px;
+}
+
+.container{
+    background:rgb(202, 202, 162);
+    width:350px;
+    margin:auto;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 0 10px gray;
+}
+
+input{
+    padding:10px;
+    width:70%;
+    border-radius:5px;
+    border:1px solid gray;
+}
+
+button{
+    padding:10px;
+    margin-top:10px;
+    background:#4facfe;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#007acc;
+}
+
+#weather{
+    margin-top:20px;
+    font-size:18px;
+}
+
+img{
+    width:80px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>🌦 Weather App</h2>
+
+<input type="text" id="city" placeholder="Enter City Name">
+<br>
+<button onclick="getWeather()">Search</button>
+
+<div id="weather"></div>
+
+</div>
+
+<script>
+
+async function getWeather(){
+
+let city=document.getElementById("city").value;
+
+if(city===""){
+    alert("Please enter city name");
+    return;
+}
+
+let apiKey="4d93e4573c556f09c3aeae8a53134b1c";
+
+let url=`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+let response=await fetch(url);
+let data=await response.json();
+
+if(data.cod=="404"){
+    document.getElementById("weather").innerHTML="❌ City not found";
+    return;
+}
+
+let icon=`https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+
+document.getElementById("weather").innerHTML=`
+
+<h3>${data.name}</h3>
+<img src="${icon}">
+<p><b>Temperature:</b> ${data.main.temp} °C</p>
+<p><b>Weather:</b> ${data.weather[0].description}</p>
+<p><b>Humidity:</b> ${data.main.humidity}%</p>
+<p><b>Wind Speed:</b> ${data.wind.speed} km/h</p>
+
+`;
+
+}
+
+</script>
+
+</body>
+</html>
